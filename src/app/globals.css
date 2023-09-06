@@ -31,15 +31,21 @@
         --background-end-rgb: 0, 0, 0;
     }
 }
+@layer utilities {
+    /* Chrome, Safari and Opera */
+    .no-scrollbar::-webkit-scrollbar {
+        display: none;
+    }
+
+    .no-scrollbar {
+        -ms-overflow-style: none; /* IE and Edge */
+        scrollbar-width: none; /* Firefox */
+    }
+}
 
 body {
     color: rgb(var(--foreground-rgb));
-    background: linear-gradient(
-            to bottom,
-            transparent,
-            rgb(var(--background-end-rgb))
-        )
-        rgb(var(--background-start-rgb));
+    background: linear-gradient(286deg, #030712 5.47%, #000512 100%);
 }
 
 .main-gradient {
