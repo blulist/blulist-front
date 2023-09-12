@@ -7,7 +7,7 @@ import { CgPlayList } from "react-icons/cg";
 const PlaylistCard: React.FC<Playlist> = ({ name, slug, isHaveBanner }) => {
     return (
         <div className="w-[250px]  min-w-[150px]  lg:w-[400px]" dir="rtl">
-            <Link href={`/playlist/${slug}`}>
+            <Link href={`/playlists/${slug}`}>
                 <Image
                     src={
                         isHaveBanner

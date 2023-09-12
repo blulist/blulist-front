@@ -3,7 +3,9 @@ import Image from "next/image";
 import axios from "axios";
 
 import { AiFillEye, AiTwotoneHeart } from "react-icons/ai";
-import { BsDownload, BsFillPlayFill, BsFillShareFill } from "react-icons/bs";
+import { BsDownload, BsFillShareFill } from "react-icons/bs";
+import PlayButton from "./PlayButton";
+
 interface Props {
     params: {
         slug: string;
@@ -59,14 +61,11 @@ const Page: NextPage<Props> = async ({ params: { slug } }) => {
             <div className="w-full">
                 <h2 className="mt-5 text-xl">{name}</h2>
                 <div className="mx-auto flex items-center justify-center gap-4">
-                    <div className="w-[35px] h-[35px] bg-gray-700 flex items-center justify-center rounded-full my-5">
+                    <div className="w-[35px] h-[35px] bg-gray-700 flex items-center justify-center rounded-full my-5 cursor-pointer">
                         <BsDownload />
                     </div>
-
-                    <div className="w-[40px] h-[40px] bg-blue-600 flex items-center justify-center rounded-full my-5">
-                        <BsFillPlayFill />
-                    </div>
-                    <div className="w-[35px] h-[35px] bg-gray-700 flex items-center justify-center rounded-full my-5">
+                    <PlayButton tracks={tracks} />
+                    <div className="w-[35px] h-[35px] bg-gray-700 flex items-center justify-center rounded-full my-5 cursor-pointer">
                         <BsFillShareFill />
                     </div>
                 </div>
