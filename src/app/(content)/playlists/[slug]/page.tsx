@@ -64,7 +64,7 @@ const Page: NextPage<Props> = async ({ params: { slug } }) => {
                     <div className="w-[35px] h-[35px] bg-gray-700 flex items-center justify-center rounded-full my-5 cursor-pointer">
                         <BsDownload />
                     </div>
-                    <PlayButton tracks={tracks} />
+                    <PlayButton tracks={tracks} slug={slug} />
                     <div className="w-[35px] h-[35px] bg-gray-700 flex items-center justify-center rounded-full my-5 cursor-pointer">
                         <BsFillShareFill />
                     </div>

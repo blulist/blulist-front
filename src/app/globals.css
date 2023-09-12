@@ -46,6 +46,8 @@
 body {
     color: rgb(var(--foreground-rgb));
     background: linear-gradient(286deg, #030712 5.47%, #000512 100%);
+    user-select: none;
+    -webkit-user-drag: none;
 }
 
 .main-gradient {

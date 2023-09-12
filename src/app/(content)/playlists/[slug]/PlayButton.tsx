@@ -5,20 +5,31 @@ import { usePlayer } from "@/stores/player";
 
 type PlayButtonProps = {
     tracks: Track[];
+    slug: string;
 };
 
-const PlayButton: React.FC<PlayButtonProps> = ({ tracks }) => {
-    const { SetPlaylist, isPlaying, togglePlay } = usePlayer();
+const PlayButton: React.FC<PlayButtonProps> = ({ tracks, slug }) => {
+    const { SetPlaylist, isPlaying, togglePlay, currentPlaylist } = usePlayer();
     const handlePlayPlaylist = () => {
-        SetPlaylist(tracks);
-        togglePlay();
+        if (currentPlaylist === slug) {
+            togglePlay();
+        } else {
+            SetPlaylist(tracks, slug);
+            if (!isPlaying) {
+                togglePlay();
+            }
+        }
     };
     return (
         <div
             className="w-[40px] h-[40px] bg-blue-600 flex items-center justify-center rounded-full my-5 cursor-pointer"
             onClick={handlePlayPlaylist}
         >
-            {isPlaying ? <BsFillPauseFill /> : <BsFillPlayFill />}
+            {isPlaying && currentPlaylist === slug ? (
+                <BsFillPauseFill />
+            ) : (
+                <BsFillPlayFill />
+            )}
         </div>
     );
 };
