@@ -3,6 +3,7 @@ import { usePlayer } from "@/stores/player";
 import clsx from "clsx";
 import { useEffect, useRef, useState } from "react";
 import { BiChevronDown } from "react-icons/bi";
+import { twMerge } from "tailwind-merge";
 import {
     BsChevronCompactDown,
     BsFillPauseFill,
@@ -38,12 +39,12 @@ const Player = () => {
             const currentaudio = new Audio(
                 `${process.env.NEXT_PUBLIC_ENDPOINT}/stream/track/${current.uniqueId}/mp`
             );
-            currentaudio.play();
             currentaudio.addEventListener("ended", () => {
                 Next();
             });
-            setCurrentTrackId(current.uniqueId);
             setAudio(currentaudio);
+            currentaudio.play();
+            setCurrentTrackId(current.uniqueId);
         } else if (!current && audio) {
             console.log("end");
             audio.pause();
@@ -53,7 +54,7 @@ const Player = () => {
     const [fullScreen, setFullScreen] = useState(false);
     return (
         <div
-            className={clsx(
+            className={twMerge(
                 "fixed left-[2.5%] z-10 -bottom-16 transition-all duration-300  h-16 w-[95%] bg-slate-900 rounded-lg flex items-center px-2 justify-between",
                 current && "!bottom-[4.2rem] ",
                 fullScreen &&
@@ -61,7 +62,7 @@ const Player = () => {
             )}
         >
             <BiChevronDown
-                className={clsx(
+                className={twMerge(
                     "absolute top-4 right-4 text-2xl bg-slate-800 h-6 w-6 rounded-full hidden",
                     fullScreen && "!flex"
                 )}
@@ -70,7 +71,7 @@ const Player = () => {
                 }}
             />
             <div
-                className={clsx(
+                className={twMerge(
                     "flex items-center gap-2 transition-all duration-300",
                     fullScreen && "flex-col"
                 )}
@@ -84,20 +85,26 @@ const Player = () => {
                             ? `${process.env.NEXT_PUBLIC_ENDPOINT}/stream/track/${current.uniqueId}/thumbnail`
                             : "https://source.unsplash.com/random"
                     }
-                    className={clsx(
+                    className={twMerge(
                         "w-14 h-14 rounded-lg transition-all duration-300",
                         fullScreen && "h-[200px] w-[200px]"
                     )}
                 />
-                <div className={clsx("", fullScreen && "text-center")}>
+                <div className={twMerge("", fullScreen && "text-center")}>
                     <div>{current ? current.title.slice(0, 30) : "Title"}</div>
                     <div className="text-white/50">
                         {current ? current.performer : "Artist"}
                     </div>
                 </div>
             </div>
-            <div>
-                <button className="mr-2 text-xl cursor-pointer" onClick={Prev}>
+            <div className="flex">
+                <button
+                    className={twMerge(
+                        "mr-2 text-xl cursor-pointer hidden ",
+                        fullScreen && "!block"
+                    )}
+                    onClick={Prev}
+                >
                     <BsSkipStartFill />
                 </button>
 

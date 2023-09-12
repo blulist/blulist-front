@@ -4,17 +4,16 @@ import { BsFillPauseFill, BsFillPlayFill } from "react-icons/bs";
 import { usePlayer } from "@/stores/player";
 
 type PlayButtonProps = {
-    tracks: Track[];
     slug: string;
 };
 
-const PlayButton: React.FC<PlayButtonProps> = ({ tracks, slug }) => {
+const PlayButton: React.FC<PlayButtonProps> = ({ slug }) => {
     const { SetPlaylist, isPlaying, togglePlay, currentPlaylist } = usePlayer();
     const handlePlayPlaylist = () => {
         if (currentPlaylist === slug) {
             togglePlay();
         } else {
-            SetPlaylist(tracks, slug);
+            SetPlaylist(slug);
             if (!isPlaying) {
                 togglePlay();
             }
