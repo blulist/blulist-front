@@ -36,10 +36,7 @@ const Player = () => {
             setAudio(currentaudio);
         }
     }, [current]);
-    useEffect(() => {
-        if (audio) {
-        }
-    }, [audio]);
+
     return (
         <div
             className={clsx(
