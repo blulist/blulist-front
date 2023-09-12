@@ -2,53 +2,24 @@ import PlaylistCard from "@/components/PlaylistCard";
 import { NextPage } from "next";
 import Image from "next/image";
 import UserCard from "@/components/UserCard";
+import axios from "axios";
 interface Props {}
 
+export const dynamic = "force-dynamic";
+type PlaylistType = {
+    statusCode: number;
+    data: Playlist[];
+};
 const getPlaylists = async () => {
-    const data = [
-        {
-            id: "lao13",
-            title: "لوفی",
-            image_url:
-                "https://assets.rjassets.com/static/playlist/5883691/9b823fe2cea6d6c.jpg",
-        },
-        {
-            id: "lao13",
-            title: "لوفی",
-            image_url:
-                "https://assets.rjassets.com/static/playlist/5883691/9b823fe2cea6d6c.jpg",
-        },
-        {
-            id: "lao13",
-            title: "لوفی",
-            image_url:
-                "https://assets.rjassets.com/static/playlist/5883691/9b823fe2cea6d6c.jpg",
-        },
-        {
-            id: "lao13",
-            title: "لوفی",
-            image_url:
-                "https://assets.rjassets.com/static/playlist/5883691/9b823fe2cea6d6c.jpg",
-        },
-        {
-            id: "lao13",
-            title: "لوفی",
-            image_url:
-                "https://assets.rjassets.com/static/playlist/5883691/9b823fe2cea6d6c.jpg",
-        },
-        {
-            id: "lao13",
-            title: "لوفی",
-            image_url:
-                "https://assets.rjassets.com/static/playlist/5883691/9b823fe2cea6d6c.jpg",
-        },
-    ];
+    const { data } = await axios.get<PlaylistType>(
+        `${process.env.API_ENDPOINT}/playlists`
+    );
 
     return data;
 };
 
 const Page: NextPage<Props> = async ({}) => {
-    const playlists = await getPlaylists();
+    const playlists = (await getPlaylists()).data;
     return (
         <div className="w-full px-4">
             <div className="flex items-center justify-center py-5 md:hidden">
@@ -72,7 +43,7 @@ const Page: NextPage<Props> = async ({}) => {
                 <h1 className="text-xl">تازه های بلولیست</h1>
                 <div className="flex mt-2 overflow-x-scroll gap-2 no-scrollbar">
                     {playlists.map((item, idx) => (
-                        <PlaylistCard key={`playlists-${idx}`} {...item} />
+                        <PlaylistCard key={`new-playlists-${idx}`} {...item} />
                     ))}
                 </div>
             </div>
@@ -82,9 +53,9 @@ const Page: NextPage<Props> = async ({}) => {
                     {playlists.map((item, idx) => (
                         <UserCard
                             key={`users-${idx}`}
-                            image_url={item.image_url}
-                            username={item.id}
-                            displayname={item.title}
+                            image_url={"https://source.unsplash.com/random"}
+                            username={item.name}
+                            displayname={item.name}
                         />
                     ))}
                 </div>

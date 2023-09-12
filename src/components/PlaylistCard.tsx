@@ -3,28 +3,24 @@ import React from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { CgPlayList } from "react-icons/cg";
-type PlaylistCardProps = {
-    image_url: string;
-    id: string;
-    title: string;
-};
-const PlaylistCard: React.FC<PlaylistCardProps> = ({
-    image_url,
-    id,
-    title,
-}) => {
+
+const PlaylistCard: React.FC<Playlist> = ({ name, slug, isHaveBanner }) => {
     return (
-        <div className=" w-[150px] min-w-[150px] lg:w-[200px]">
-            <Link href={`/playlist/${id}`}>
+        <div className="w-[250px]  min-w-[150px]  lg:w-[400px]" dir="rtl">
+            <Link href={`/playlist/${slug}`}>
                 <Image
-                    src={image_url}
-                    alt={title}
+                    src={
+                        isHaveBanner
+                            ? `${process.env.NEXT_PUBLIC_ENDPOINT}/stream/playlist/${slug}/banner`
+                            : "https://source.unsplash.com/random"
+                    }
+                    alt={name}
                     width={150}
                     height={150}
-                    className="rounded-xl lg:w-[200px]"
+                    className="h-[100px] rounded-xl lg:w-[400px] lg:h-[200px] object-cover"
                 ></Image>
                 <div className="flex justify-between px-2 pt-1">
-                    <h1>{title}</h1> <CgPlayList className="text-2xl" />
+                    <h1>{name}</h1> <CgPlayList className="text-2xl" />
                 </div>
             </Link>
         </div>
