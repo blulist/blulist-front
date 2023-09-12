@@ -19,10 +19,22 @@ export const usePlayer = create<PlayerType>((set) => ({
     currentIndex: 0,
     playlist: [],
     Next: () => {
-        set(({ current, currentIndex, playlist }) => ({
-            current: playlist[currentIndex + 1],
-            currentIndex: currentIndex + 1,
-        }));
+        set(({ current, currentIndex, playlist }) => {
+            if (currentIndex === playlist.length - 1) {
+                return {
+                    isPlaying: false,
+                    currentPlaylist: "",
+                    current: undefined,
+                    currentIndex: 0,
+                    playlist: [],
+                };
+            }
+
+            return {
+                current: playlist[currentIndex + 1],
+                currentIndex: currentIndex + 1,
+            };
+        });
     },
     Prev: () => {},
     SetPlaylist: (newplaylist, slug) => {

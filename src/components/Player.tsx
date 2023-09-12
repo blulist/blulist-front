@@ -2,7 +2,13 @@
 import { usePlayer } from "@/stores/player";
 import clsx from "clsx";
 import { useEffect, useRef, useState } from "react";
-import { BsFillPauseFill, BsFillPlayFill, BsSkipEndFill } from "react-icons/bs";
+import { BiChevronDown } from "react-icons/bi";
+import {
+    BsChevronCompactDown,
+    BsFillPauseFill,
+    BsFillPlayFill,
+    BsSkipEndFill,
+} from "react-icons/bs";
 const Player = () => {
     const { current, playlist, isPlaying, togglePlay, Next } = usePlayer();
     const [audio, setAudio] = useState<HTMLAudioElement | null>(null);
@@ -13,7 +19,6 @@ const Player = () => {
         }
     }, [isPlaying, current]);
     useEffect(() => {
-        console.log(current?.uniqueId !== currentTrackId);
         if (current && !audio) {
             const currentaudio = new Audio(
                 `${process.env.NEXT_PUBLIC_ENDPOINT}/stream/track/${current.uniqueId}/mp`
@@ -34,17 +39,35 @@ const Player = () => {
                 Next();
             });
             setAudio(currentaudio);
+        } else if (!current && audio) {
+            audio.pause();
+            setAudio(null);
         }
     }, [current]);
-
+    const [fullScreen, setFullScreen] = useState(false);
     return (
         <div
             className={clsx(
                 "fixed left-[2.5%] z-10 -bottom-16 transition-all duration-300  h-16 w-[95%] bg-slate-900 rounded-lg flex items-center px-2 justify-between",
-                current && "!bottom-[4.2rem]"
+                current && "!bottom-[4.2rem] ",
+                fullScreen && "h-screen !bottom-0 w-full left-[0%]"
             )}
         >
-            <div className="flex items-center gap-2">
+            <BiChevronDown
+                className={clsx(
+                    "absolute top-4 right-4 text-2xl bg-slate-800 h-6 w-6 rounded-full hidden",
+                    fullScreen && "!flex"
+                )}
+                onClick={() => {
+                    setFullScreen((prev) => !prev);
+                }}
+            />
+            <div
+                className="flex items-center gap-2"
+                onClick={() => {
+                    setFullScreen((prev) => !prev);
+                }}
+            >
                 <img
                     src={
                         current && current.isHaveThumbnail
@@ -54,7 +77,7 @@ const Player = () => {
                     className="w-14 h-14 rounded-lg"
                 />
                 <div>
-                    <div>{current ? current.title : "Title"}</div>
+                    <div>{current ? current.title.slice(0, 30) : "Title"}</div>
                     <div>{current ? current.performer : "Artist"}</div>
                 </div>
             </div>
