@@ -10,6 +10,7 @@ type PlayerType = {
     Next: () => void;
     Prev: () => void;
     SetPlaylist: (slug: string) => Promise<void>;
+    playById: (id: number, slug: string) => Promise<void>;
     togglePlay: () => void;
 };
 
@@ -84,5 +85,39 @@ export const usePlayer = create<PlayerType>((set, get) => ({
     },
     togglePlay: () => {
         set(({ isPlaying }) => ({ isPlaying: !isPlaying }));
+    },
+    playById: async (id, slug) => {
+        console.log("play");
+        const { currentPlaylist, playlist, page, currentIndex } = get();
+        if (currentPlaylist === slug) {
+            if (id > playlist.length) {
+                while (id > playlist.length) {
+                    const { data } = await axios.get<TracksType>(
+                        `${
+                            process.env.NEXT_PUBLIC_ENDPOINT
+                        }/playlists/${currentPlaylist}/tracks?page=${
+                            page + 1
+                        }&limit=10`
+                    );
+                    set(() => ({
+                        playlist: [...playlist, ...data.data],
+                        page: page + 1,
+                    }));
+                }
+                set(() => ({ current: playlist[id], currentIndex: id }));
+            } else {
+                set(() => ({ current: playlist[id], currentIndex: id }));
+            }
+        } else {
+            const { data } = await axios.get<TracksType>(
+                `${process.env.NEXT_PUBLIC_ENDPOINT}/playlists/${slug}/tracks?page=1&limit=10`
+            );
+            set(() => ({
+                playlist: data.data,
+                current: data.data[0],
+                currentPlaylist: slug,
+                page: 1,
+            }));
+        }
     },
 }));

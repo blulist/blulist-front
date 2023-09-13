@@ -1,7 +1,10 @@
+"use client";
 import React from "react";
 import Image from "next/image";
+import { usePlayer } from "@/stores/player";
 interface TrackListItemProps extends Track {
     id: number;
+    slug: string;
 }
 
 const TrackListItem: React.FC<TrackListItemProps> = ({
@@ -11,11 +14,16 @@ const TrackListItem: React.FC<TrackListItemProps> = ({
     title,
     uniqueId,
     id,
+    slug,
 }) => {
+    const { playById } = usePlayer();
     return (
         <div
             className="flex items-center  mx-2 bg-slate-800 px-4 py-2 rounded-xl cursor-pointer"
             dir="ltr"
+            onClick={() => {
+                playById(id, slug);
+            }}
         >
             <div className="flex gap-2 items-center justify-center">
                 <Image

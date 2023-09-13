@@ -90,6 +90,7 @@ const Page: NextPage<Props> = async ({ params: { slug } }) => {
                             key={`playlist-item-${idx}`}
                             {...item}
                             id={idx}
+                            slug={slug}
                         />
                     ))}
                 </div>
