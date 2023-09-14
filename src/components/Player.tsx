@@ -15,6 +15,7 @@ const Player = () => {
     const { current, playlist, isPlaying, togglePlay, Next, Prev } =
         usePlayer();
     const [audio, setAudio] = useState<HTMLAudioElement | null>(null);
+    const [timeElapsed, setTimeElapsed] = useState(0);
     const [currentTrackId, setCurrentTrackId] = useState("");
     useEffect(() => {
         if (current && audio) {
@@ -27,10 +28,18 @@ const Player = () => {
             const currentaudio = new Audio(
                 `${process.env.NEXT_PUBLIC_ENDPOINT}/stream/track/${current.uniqueId}/mp`
             );
-            currentaudio.play();
+            currentaudio.preload = "auto";
             currentaudio.addEventListener("ended", () => {
                 Next();
             });
+            currentaudio.addEventListener("timeupdate", () => {
+                console.log(currentaudio.duration);
+                if (timeElapsed !== Math.round(currentaudio.currentTime)) {
+                    setTimeElapsed(Math.round(currentaudio.currentTime));
+                }
+            });
+            currentaudio.play();
+
             setAudio(currentaudio);
             setCurrentTrackId(current.uniqueId);
         } else if (current && audio && current?.uniqueId !== currentTrackId) {
@@ -39,11 +48,17 @@ const Player = () => {
             const currentaudio = new Audio(
                 `${process.env.NEXT_PUBLIC_ENDPOINT}/stream/track/${current.uniqueId}/mp`
             );
+            currentaudio.preload = "auto";
             currentaudio.addEventListener("ended", () => {
                 Next();
             });
-            setAudio(currentaudio);
+            currentaudio.addEventListener("timeupdate", () => {
+                if (timeElapsed !== Math.round(currentaudio.currentTime)) {
+                    setTimeElapsed(Math.round(currentaudio.currentTime));
+                }
+            });
             currentaudio.play();
+            setAudio(currentaudio);
             setCurrentTrackId(current.uniqueId);
         } else if (!current && audio) {
             console.log("end");
@@ -58,12 +73,12 @@ const Player = () => {
                 "fixed left-[2.5%] z-10 -bottom-16 transition-all duration-300  h-16 w-[95%] bg-slate-900 rounded-lg flex items-center px-2 justify-between",
                 current && "!bottom-[4.2rem] ",
                 fullScreen &&
-                    "h-screen !bottom-[0rem] w-full !left-[0%] flex-col !justify-center"
+                    "h-screen !bottom-[0rem] w-full !left-[0%] flex-col !justify-center "
             )}
         >
             <BiChevronDown
                 className={twMerge(
-                    "absolute top-4 right-4 text-2xl bg-slate-800 h-6 w-6 rounded-full hidden",
+                    "absolute top-16 right-6 text-2xl  h-10 w-10 rounded-full hidden",
                     fullScreen && "!flex"
                 )}
                 onClick={() => {
@@ -73,7 +88,7 @@ const Player = () => {
             <div
                 className={twMerge(
                     "flex items-center gap-2 transition-all duration-300",
-                    fullScreen && "flex-col"
+                    fullScreen && "flex-col w-[85vw] max-w-[400px] "
                 )}
                 onClick={() => {
                     setFullScreen((prev) => !prev);
@@ -87,21 +102,61 @@ const Player = () => {
                     }
                     className={twMerge(
                         "w-14 h-14 rounded-lg transition-all duration-300",
-                        fullScreen && "h-[200px] w-[200px]"
+                        fullScreen &&
+                            " w-[85vw] h-[85vw] max-w-[400px] max-h-[400px]"
                     )}
                 />
-                <div className={twMerge("", fullScreen && "text-center")}>
+                <div className={twMerge("", fullScreen && "text-center mt-3")}>
                     <div>{current ? current.title.slice(0, 30) : "Title"}</div>
                     <div className="text-white/50">
                         {current ? current.performer : "Artist"}
                     </div>
                 </div>
             </div>
-            <div className="flex">
+            <div
+                className={twMerge(
+                    "hidden flex-col w-[90%] mt-10",
+                    fullScreen && "flex "
+                )}
+            >
+                <div>
+                    <div>
+                        <input
+                            type="range"
+                            value={timeElapsed}
+                            max={audio ? audio.duration : undefined}
+                            onChange={(e) => {
+                                if (audio) {
+                                    audio.currentTime = +e.target.value;
+                                }
+                            }}
+                            className="player-range w-full "
+                        />
+                    </div>
+                </div>
+                <div className="flex justify-between mt-3">
+                    <div>
+                        {new Date(timeElapsed * 1000)
+                            .toISOString()
+                            .substr(11, 8)}
+                    </div>
+                    <div>
+                        <div>
+                            {new Date(
+                                (audio && audio.duration ? audio.duration : 0) *
+                                    1000
+                            )
+                                .toISOString()
+                                .substr(11, 8)}
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div className={twMerge("flex", fullScreen && " gap-5 mt-5")}>
                 <button
                     className={twMerge(
                         "mr-2 text-xl cursor-pointer hidden ",
-                        fullScreen && "!block"
+                        fullScreen && "!block text-3xl"
                     )}
                     onClick={Prev}
                 >
@@ -109,12 +164,21 @@ const Player = () => {
                 </button>
 
                 <button
-                    className="mr-2 text-xl cursor-pointer"
+                    className={twMerge(
+                        "mr-2 text-xl cursor-pointer",
+                        fullScreen && " text-3xl bg-white/30 p-3 rounded-full"
+                    )}
                     onClick={togglePlay}
                 >
                     {isPlaying ? <BsFillPauseFill /> : <BsFillPlayFill />}
                 </button>
-                <button className="mr-2 text-xl cursor-pointer" onClick={Next}>
+                <button
+                    className={twMerge(
+                        "mr-2 text-xl cursor-pointer",
+                        fullScreen && " text-3xl"
+                    )}
+                    onClick={Next}
+                >
                     <BsSkipEndFill />
                 </button>
             </div>

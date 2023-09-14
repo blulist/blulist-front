@@ -53,3 +53,14 @@ body {
 .main-gradient {
     background: linear-gradient(286deg, #030712 5.47%, #000512 100%);
 }
+
+.player-range {
+    -webkit-appearance: none;
+    appearance: none;
+    height: 3px;
+    border-radius: 9999px;
+    width: 100%;
+    cursor: pointer;
+    outline: none;
+    background: #ffffff49;
+}

@@ -2,8 +2,8 @@
 
 ### Player Features
 - [x] Change Track by clicko on the playlist items
-- [ ] Progress bar
-- [ ] Current Playlist Tracks List
+- [x] Progress bar
+- [x] Current Playlist Tracks List
   
 ### Playlist Page
 - [ ] Infinite Scroll on playlist page

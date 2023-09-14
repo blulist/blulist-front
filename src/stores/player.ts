@@ -104,9 +104,17 @@ export const usePlayer = create<PlayerType>((set, get) => ({
                         page: page + 1,
                     }));
                 }
-                set(() => ({ current: playlist[id], currentIndex: id }));
+                set(() => ({
+                    current: playlist[id],
+                    currentIndex: id,
+                    isPlaying: true,
+                }));
             } else {
-                set(() => ({ current: playlist[id], currentIndex: id }));
+                set(() => ({
+                    current: playlist[id],
+                    currentIndex: id,
+                    isPlaying: true,
+                }));
             }
         } else {
             const { data } = await axios.get<TracksType>(
@@ -117,6 +125,7 @@ export const usePlayer = create<PlayerType>((set, get) => ({
                 current: data.data[0],
                 currentPlaylist: slug,
                 page: 1,
+                isPlaying: true,
             }));
         }
     },
