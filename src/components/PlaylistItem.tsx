@@ -13,7 +13,7 @@ const PlaylistItem: React.FC<Playlist> = ({
 }) => {
     return (
         <Link
-            className="w-[85vw] h-16 bg-slate-800 rounded-lg overflow-hidden mx-auto flex items-center justify-between"
+            className="w-[60vw] h-16 bg-slate-800 rounded-lg overflow-hidden mx-auto flex items-center justify-between"
             dir="rtl"
             href={`playlists/${slug}`}
         >
@@ -25,8 +25,9 @@ const PlaylistItem: React.FC<Playlist> = ({
                 }
                 alt={`Listen ${name} on blulist`}
                 width={50}
+                loading={"lazy"}
                 height={50}
-                className="w-16 h-16"
+                className="w-28 h-28"
             />
             <div>
                 <div>{name}</div>
@@ -48,5 +49,4 @@ const PlaylistItem: React.FC<Playlist> = ({
         </Link>
     );
 };
-
 export default PlaylistItem;
