@@ -7,15 +7,13 @@ export default function RootLayout({
     children: React.ReactNode;
 }) {
     return (
-        <html lang="en">
-            <body className="font-peyda">
-                <div className="flex" dir="rtl">
-                    <DesktopNav />
-                    {children}
-                </div>
-                <Player />
-                <MobileNav />
-            </body>
-        </html>
+        <>
+            <div className="flex" dir="rtl">
+                <DesktopNav />
+                {children}
+            </div>
+            <Player />
+            <MobileNav />
+        </>
     );
 }

@@ -4,7 +4,7 @@ import Link from "next/link";
 import { AiFillHome } from "react-icons/ai";
 import { BiSearch, BiSolidPlaylist } from "react-icons/bi";
 import { MdLibraryMusic } from "react-icons/md";
-
+import { twMerge } from "tailwind-merge";
 import { usePathname } from "next/navigation";
 import clsx from "clsx";
 const MobileNav = () => {
@@ -18,8 +18,8 @@ const MobileNav = () => {
                 <li className="">
                     <Link
                         href={"/home"}
-                        className={clsx(
-                            "flex flex-col items-center justify-center text-white/50",
+                        className={twMerge(
+                            "flex flex-col items-center justify-center text-white/50 transition-all duration-300 ",
                             pathName.startsWith("/home") && "text-white/100"
                         )}
                     >
@@ -30,21 +30,21 @@ const MobileNav = () => {
                 <li>
                     <Link
                         href={"/playlists#"}
-                        className={clsx(
-                            "flex flex-col items-center justify-center text-white/50",
+                        className={twMerge(
+                            "flex flex-col items-center justify-center text-white/50 transition-all duration-300",
                             pathName.startsWith("/playlists") &&
                                 "text-white/100"
                         )}
                     >
                         <BiSolidPlaylist />
-                        <span className="text-sm font-light">پلی لیست</span>
+                        <span className="text-sm font-light">پلی لیست ها</span>
                     </Link>
                 </li>
                 <li>
                     <Link
                         href={"/search"}
-                        className={clsx(
-                            "flex flex-col items-center justify-center text-white/50",
+                        className={twMerge(
+                            "flex flex-col items-center justify-center text-white/50 transition-all duration-300",
                             pathName.startsWith("/search") && "text-white/100"
                         )}
                     >
@@ -55,8 +55,8 @@ const MobileNav = () => {
                 <li>
                     <Link
                         href={"/library"}
-                        className={clsx(
-                            "flex flex-col items-center justify-center text-white/50",
+                        className={twMerge(
+                            "flex flex-col items-center justify-center text-white/50 transition-all duration-300",
                             pathName.startsWith("/library") && "text-white/100"
                         )}
                     >

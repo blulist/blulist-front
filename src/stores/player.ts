@@ -87,7 +87,7 @@ export const usePlayer = create<PlayerType>((set, get) => ({
         set(({ isPlaying }) => ({ isPlaying: !isPlaying }));
     },
     playById: async (id, slug) => {
-        console.log("play");
+        console.log("play", id, slug);
         const { currentPlaylist, playlist, page, currentIndex } = get();
         if (currentPlaylist === slug) {
             if (id > playlist.length) {
@@ -122,7 +122,7 @@ export const usePlayer = create<PlayerType>((set, get) => ({
             );
             set(() => ({
                 playlist: data.data,
-                current: data.data[0],
+                current: data.data[id],
                 currentPlaylist: slug,
                 page: 1,
                 isPlaying: true,

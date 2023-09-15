@@ -14,7 +14,6 @@ const getPlaylists = async () => {
     const { data } = await axios.get<PlaylistType>(
         `${process.env.API_ENDPOINT}/playlists`
     );
-
     return data;
 };
 

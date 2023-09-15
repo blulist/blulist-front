@@ -33,7 +33,6 @@ const Player = () => {
                 Next();
             });
             currentaudio.addEventListener("timeupdate", () => {
-                console.log(currentaudio.duration);
                 if (timeElapsed !== Math.round(currentaudio.currentTime)) {
                     setTimeElapsed(Math.round(currentaudio.currentTime));
                 }
@@ -70,10 +69,11 @@ const Player = () => {
     return (
         <div
             className={twMerge(
-                "fixed left-[2.5%] z-10 -bottom-16 transition-all duration-300  h-16 w-[95%] bg-slate-900 rounded-lg flex items-center px-2 justify-between",
+                "fixed left-[2.5%] z-10 -bottom-16 transition-all duration-300  h-16 w-[95%] bg-slate-900/60 backdrop-blur-lg rounded-lg flex items-center px-2 justify-between",
                 current && "!bottom-[4.2rem] ",
-                fullScreen &&
-                    "h-screen !bottom-[0rem] w-full !left-[0%] flex-col !justify-center "
+                !!current &&
+                    fullScreen &&
+                    "h-screen !bottom-[0rem] w-full !left-[0%] flex-col !justify-center bg-slate-900"
             )}
         >
             <BiChevronDown
@@ -88,7 +88,9 @@ const Player = () => {
             <div
                 className={twMerge(
                     "flex items-center gap-2 transition-all duration-300",
-                    fullScreen && "flex-col w-[85vw] max-w-[400px] "
+                    !!current &&
+                        fullScreen &&
+                        "flex-col w-[85vw] max-w-[400px] "
                 )}
                 onClick={() => {
                     setFullScreen((prev) => !prev);
@@ -102,13 +104,21 @@ const Player = () => {
                     }
                     className={twMerge(
                         "w-14 h-14 rounded-lg transition-all duration-300",
-                        fullScreen &&
-                            " w-[85vw] h-[85vw] max-w-[400px] max-h-[400px]"
+                        !!current &&
+                            fullScreen &&
+                            "w-[85vw] h-[85vw] max-w-[400px] max-h-[400px]"
                     )}
                 />
-                <div className={twMerge("", fullScreen && "text-center mt-3")}>
-                    <div>{current ? current.title.slice(0, 30) : "Title"}</div>
-                    <div className="text-white/50">
+                <div
+                    className={twMerge(
+                        "font-sans",
+                        fullScreen && "text-center mt-3"
+                    )}
+                >
+                    <div className="whitespace-nowrap">
+                        {current ? current.title.slice(0, 20) : "Title"}
+                    </div>
+                    <div className="text-white/50 font-light">
                         {current ? current.performer : "Artist"}
                     </div>
                 </div>
@@ -165,7 +175,7 @@ const Player = () => {
 
                 <button
                     className={twMerge(
-                        "mr-2 text-xl cursor-pointer",
+                        "mr-2 text-2xl cursor-pointer",
                         fullScreen && " text-3xl bg-white/30 p-3 rounded-full"
                     )}
                     onClick={togglePlay}
@@ -174,8 +184,8 @@ const Player = () => {
                 </button>
                 <button
                     className={twMerge(
-                        "mr-2 text-xl cursor-pointer",
-                        fullScreen && " text-3xl"
+                        "mr-2 text-2xl cursor-pointer",
+                        fullScreen && "text-3xl"
                     )}
                     onClick={Next}
                 >
