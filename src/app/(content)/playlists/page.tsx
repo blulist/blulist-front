@@ -1,69 +1,68 @@
-"use client";
-
+import PlaylistCard from "@/components/PlaylistCard";
 import { NextPage } from "next";
+import Image from "next/image";
 import axios from "axios";
-import PlaylistItem from "@/components/PlaylistItem";
-import { useEffect, useRef, useState } from "react";
-import { AiOutlineReload } from "react-icons/ai";
-import { useIsInViewport } from "@/hooks/useIsInViewport";
 interface Props {}
+
+export const dynamic = "force-dynamic";
 type PlaylistType = {
-    statusCode: number;
-    data: Playlist[];
+  statusCode: number;
+  data: Playlist[];
+};
+const getPlaylists = async (filter: "all" | "likes" | "view", page: number) => {
+  const { data } = await axios.get<PlaylistType>(
+    `${process.env.API_ENDPOINT}/playlists?sort=${filter}&page=${page}`,
+  );
+  return data.data;
 };
 
-const Page: NextPage<Props> = ({}) => {
-    const loadingRef = useRef(null);
-    const isLoadingInView = useIsInViewport(loadingRef);
-    const [playlists, setPlaylists] = useState<Playlist[]>([]);
-    const [currentPage, setCurrentPage] = useState(1);
-    const [loading, setLoading] = useState(false);
-    const [loadmore, setLoadmore] = useState(false);
-    useEffect(() => {
-        const getPlaylists = async () => {
-            const { data } = await axios.get<PlaylistType>(
-                `${process.env.NEXT_PUBLIC_ENDPOINT}/playlists?limit=20`
-            );
-            setPlaylists([...data.data]);
-            setLoadmore(true);
-        };
-        getPlaylists();
-    }, []);
-
-    const handleLoadMore = async () => {
-        if (loadmore && !loading) {
-            setLoading(true);
-            const { data } = await axios.get<PlaylistType>(
-                `${process.env.NEXT_PUBLIC_ENDPOINT}/playlists?limit=20&page=${
-                    currentPage + 1
-                }`
-            );
-            if (data.data.length > 0) {
-                setPlaylists((prev) => [...prev, ...data.data]);
-            } else if (data.data.length === 0) {
-                setLoadmore(false);
-            }
-        }
-    };
-    useEffect(() => {
-        if (isLoadingInView && loadmore) {
-            handleLoadMore();
-        }
-    }, [isLoadingInView, playlists]);
-    return (
-        <div className="min-h-screen mx-auto flex flex-col gap-5 items-center mb-5">
-            <div className="mt-5 text-2xl">پلی لیست ها</div>
-            {playlists.length > 0 &&
-                playlists.map((item, idx) => (
-                    <PlaylistItem key={`playlist-item-${idx}`} {...item} />
-                ))}
-            <div ref={loadingRef} className="h-20">
-                {loadmore && (
-                    <AiOutlineReload className="animate-spin text-3xl" />
-                )}
-            </div>
+const Page: NextPage<Props> = async ({}) => {
+  const [tops] = await Promise.all([
+    getPlaylists("view", 1),
+    // getPlaylists("all", 1),
+  ]);
+  return (
+    <div className="w-full px-4">
+      <div className="flex items-center justify-center py-5 md:hidden">
+        <Image
+          src="/logo.png"
+          alt="Blulist logo"
+          width={40}
+          height={40}
+        ></Image>
+        <h1 className="text-xl">بلولیست</h1>
+      </div>
+      <div className="mt-5">
+        <h1 className="text-xl">پلی لیست های ویژه</h1>
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 mt-2 overflow-x-scroll gap-2 no-scrollbar">
+          {tops.map((item, idx) => (
+            <PlaylistCard key={`playlists-${idx}`} {...item} />
+          ))}
         </div>
-    );
+      </div>
+      {/*<div className="mt-5">*/}
+      {/*  <h1 className="text-xl">تازه های بلولیست</h1>*/}
+      {/*  <div className="flex mt-2 overflow-x-scroll gap-2 no-scrollbar">*/}
+      {/*    {all.map((item, idx) => (*/}
+      {/*      <PlaylistCard key={`new-playlists-${idx}`} {...item} />*/}
+      {/*    ))}*/}
+      {/*  </div>*/}
+      {/*</div>*/}
+      {/*<div className="mt-5">*/}
+      {/*    <h1 className="text-xl">کاربران برتر</h1>*/}
+      {/*    <div className="flex mt-2 overflow-x-scroll gap-2 no-scrollbar">*/}
+      {/*        {playlists.map((item, idx) => (*/}
+      {/*            <UserCard*/}
+      {/*                key={`users-${idx}`}*/}
+      {/*                image_url={"https://source.unsplash.com/random"}*/}
+      {/*                username={item.name}*/}
+      {/*                displayname={item.name}*/}
+      {/*            />*/}
+      {/*        ))}*/}
+      {/*    </div>*/}
+      {/*</div>*/}
+    </div>
+  );
 };
 
 export default Page;
