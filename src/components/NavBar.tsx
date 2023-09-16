@@ -25,16 +25,7 @@ const NavBar = () => {
         <div className="hidden md:flex bg-white/10 px-10 py-3 rounded-full border border-white/10 ">
           <ul className="flex gap-6 lg:gap-16">
             <li>
-              <Link href={"#"}>پلی لیست ها</Link>
-            </li>
-            <li>
-              <Link href={"#"}>ساخت پلی لیست</Link>
-            </li>
-            <li>
-              <Link href={"#"}>درباره ما</Link>
-            </li>
-            <li>
-              <Link href={"#"}>قانون داریم؟</Link>
+              <Link href={"/playlists"}>پلی لیست ها</Link>
             </li>
           </ul>
         </div>
@@ -73,16 +64,7 @@ const NavBar = () => {
           <div className="text-center font-peyda text-2xl">
             <ul className="flex flex-col gap-10 lg:gap-16">
               <li>
-                <Link href={"#"}>پلی لیست ها</Link>
-              </li>
-              <li>
-                <Link href={"#"}>ساخت پلی لیست</Link>
-              </li>
-              <li>
-                <Link href={"#"}>درباره ما</Link>
-              </li>
-              <li>
-                <Link href={"#"}>قانون داریم؟</Link>
+                <Link href={"/playlists"}>پلی لیست ها</Link>
               </li>
             </ul>
             <button className="mt-10 bg-gradient-to-br from-blue-500 to-blue-700 px-16 py-2 rounded-3xl">
