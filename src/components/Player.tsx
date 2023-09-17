@@ -1,6 +1,5 @@
 "use client";
 import { usePlayer } from "@/stores/player";
-import clsx from "clsx";
 import { useEffect, useRef, useState } from "react";
 import { BiChevronDown } from "react-icons/bi";
 import { twMerge } from "tailwind-merge";
@@ -11,9 +10,12 @@ import {
     BsSkipEndFill,
     BsSkipStartFill,
 } from "react-icons/bs";
+import { RiMenuFoldFill } from "react-icons/ri";
+import { useWindowSize } from "@uidotdev/usehooks";
 const Player = () => {
     const { current, playlist, isPlaying, togglePlay, Next, Prev } =
         usePlayer();
+    const size = useWindowSize();
     const [audio, setAudio] = useState<HTMLAudioElement | null>(null);
     const [timeElapsed, setTimeElapsed] = useState(0);
     const [currentTrackId, setCurrentTrackId] = useState("");
@@ -69,8 +71,9 @@ const Player = () => {
     return (
         <div
             className={twMerge(
-                "fixed left-[2.5%] z-10 -bottom-16 transition-all duration-300  h-16 w-[95%] bg-slate-900/60 backdrop-blur-lg rounded-lg flex items-center px-2 justify-between",
-                current && "!bottom-[4.2rem] ",
+                "fixed left-[2.5%] z-10 -bottom-16 transition-all duration-300  h-16 w-[95%] bg-[#0F172A99] backdrop-blur-lg rounded-lg flex items-center px-2 justify-between ",
+                current &&
+                    "!bottom-[4.2rem] md:!bottom-[0rem] md:h-24 md:w-[100%] md:left-[0%] md:px-24",
                 !!current &&
                     fullScreen &&
                     "h-screen !bottom-[0rem] w-full !left-[0%] flex-col !justify-center bg-slate-900"
@@ -93,14 +96,16 @@ const Player = () => {
                         "flex-col w-[85vw] max-w-[400px] "
                 )}
                 onClick={() => {
-                    setFullScreen((prev) => !prev);
+                    if (size.width! < 721) {
+                        setFullScreen((prev) => !prev);
+                    }
                 }}
             >
                 <img
                     src={
                         current && current.isHaveThumbnail
                             ? `${process.env.NEXT_PUBLIC_ENDPOINT}/stream/track/${current.uniqueId}/thumbnail`
-                            : "https://source.unsplash.com/random"
+                            : "/assets/track.jpg"
                     }
                     className={twMerge(
                         "w-14 h-14 rounded-lg transition-all duration-300",
@@ -112,7 +117,7 @@ const Player = () => {
                 <div
                     className={twMerge(
                         "font-sans",
-                        fullScreen && "text-center mt-3"
+                        fullScreen && "text-center mt-3 cursor-pointer"
                     )}
                 >
                     <div className="whitespace-nowrap">
@@ -125,7 +130,7 @@ const Player = () => {
             </div>
             <div
                 className={twMerge(
-                    "hidden flex-col w-[90%] mt-10",
+                    "hidden flex-col w-[90%] mt-10 md:flex md:max-w-[200px] md:mt-0 lg:max-w-[400px]",
                     fullScreen && "flex "
                 )}
             >
@@ -165,8 +170,9 @@ const Player = () => {
             <div className={twMerge("flex", fullScreen && " gap-5 mt-5")}>
                 <button
                     className={twMerge(
-                        "mr-2 text-xl cursor-pointer hidden ",
-                        fullScreen && "!block text-3xl"
+                        "hidden mr-2 text-xl cursor-pointer  md:text-4xl ",
+                        fullScreen && "!block text-3xl ",
+                        size.width! > 720 && "!block"
                     )}
                     onClick={Prev}
                 >
@@ -175,8 +181,8 @@ const Player = () => {
 
                 <button
                     className={twMerge(
-                        "mr-2 text-2xl cursor-pointer",
-                        fullScreen && " text-3xl bg-white/30 p-3 rounded-full"
+                        "mr-2 text-2xl cursor-pointer md:text-4xl",
+                        fullScreen && " text-3xl bg-white/30 p-3 rounded-full "
                     )}
                     onClick={togglePlay}
                 >
@@ -184,8 +190,8 @@ const Player = () => {
                 </button>
                 <button
                     className={twMerge(
-                        "mr-2 text-2xl cursor-pointer",
-                        fullScreen && "text-3xl"
+                        "mr-2 text-2xl cursor-pointer md:text-4xl",
+                        fullScreen && "text-3xl "
                     )}
                     onClick={Next}
                 >
