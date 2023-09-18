@@ -5,8 +5,8 @@ on:
     branches:
       - main
       - mrx
-  pull_request: 
-    types: 
+  pull_request:
+    types:
       - opened
       - synchronize
 
