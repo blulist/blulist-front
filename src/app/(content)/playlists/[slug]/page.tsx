@@ -5,6 +5,7 @@ import { AiFillEye, AiTwotoneHeart } from "react-icons/ai";
 import { BsDownload, BsFillShareFill } from "react-icons/bs";
 import PlayButton from "./PlayButton";
 import TrackListItem from "@/components/TrackListItem";
+import { Tracks } from "@/components/tracks";
 
 interface Props {
   params: {
@@ -21,19 +22,10 @@ const getPlaylistData = async (slug: string) => {
   return data;
 };
 
-const getInitialTracks = async (slug: string) => {
-  const { data } = await axios.get<TracksType>(
-    `${process.env.API_ENDPOINT}/playlists/${slug}/tracks?limit=10&page=1`,
-  );
-
-  return data;
-};
-
 const Page: NextPage<Props> = async ({ params: { slug } }) => {
   const {
     data: { name, likesCount, viewCount, isHaveBanner, tracksCount, createdAt },
   } = await getPlaylistData(slug);
-  const tracks = (await getInitialTracks(slug)).data;
 
   return (
     <div
@@ -79,16 +71,7 @@ const Page: NextPage<Props> = async ({ params: { slug } }) => {
             </div>
           </div>
         </div>
-        <div className="mx-auto flex flex-col gap-3 mt-3 hidden-scroll max-h-[400px]">
-          {tracks.map((item, idx) => (
-            <TrackListItem
-              key={`playlist-item-${idx}`}
-              {...item}
-              id={idx}
-              slug={slug}
-            />
-          ))}
-        </div>
+        <Tracks slug={slug} />
       </div>
     </div>
   );

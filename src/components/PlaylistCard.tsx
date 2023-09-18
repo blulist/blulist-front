@@ -12,6 +12,9 @@ const PlaylistCard: React.FC<Playlist> = ({
   viewCount,
   tracksCount,
 }) => {
+  console.log(
+    `${process.env.NEXT_PUBLIC_ENDPOINT}/stream/playlist/${slug}/banner`,
+  );
   return (
     <div className="w-full  p-2" dir="rtl">
       <Link href={`/playlists/${slug}`}>
