@@ -1,31 +1,28 @@
-name: Build
+name: Docker Build and Run
 
-on: 
-    push:
-        branches: ["main","dev"]
-        paths-ignore: 
-            - 'docs/**'
-            - "README.md"
-            - "LICENSE"
-            - "CHANGELOG.md"
+on:
+  push:
+    branches:
+      - main
+      - mrx
+  pull_request: 
+    types: 
+      - opened
+      - synchronize
+
+
 jobs:
-    build:
-        runs-on: ubuntu-latest
-        steps:
-             - name: Checkout repository
-               uses: actions/checkout@v3
+  build:
+    runs-on: ubuntu-latest
 
-             -  name: Install Node V18
-                uses: actions/setup-node@v3
-                with:
-                    node-version: 18
-                    cache: npm
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v2
 
-             - name: Install pnpm
-               run: npm i pnpm -g
+    - name: Set up Docker
+      uses: docker/setup-action@v2
+      with:
+        dockerfile: Dockerfile
 
-             - name: Install dependencies
-               run: pnpm i
-
-             - name: Build
-               run: npm run build
+    - name: Build Docker image
+      run: docker build -t my-docker-image .
