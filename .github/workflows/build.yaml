@@ -1,0 +1,31 @@
+name: Build
+
+on: 
+    push:
+        branches: ["main","dev"]
+        paths-ignore: 
+            - 'docs/**'
+            - "README.md"
+            - "LICENSE"
+            - "CHANGELOG.md"
+jobs:
+    build:
+        runs-on: ubuntu-latest
+        steps:
+             - name: Checkout repository
+               uses: actions/checkout@v3
+
+             -  name: Install Node V18
+                uses: actions/setup-node@v3
+                with:
+                    node-version: 18
+                    cache: npm
+
+             - name: Install pnpm
+               run: npm i pnpm -g
+
+             - name: Install dependencies
+               run: pnpm i
+
+             - name: Build
+               run: npm run build
